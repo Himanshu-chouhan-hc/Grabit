@@ -1,0 +1,375 @@
+<%- layout('layouts/boilerplate') %>
+
+<div class="checkout-container">
+  <div class="checkout-content">
+    <div class="checkout-main">
+      <!-- Address Section -->
+      <div class="checkout-section">
+        <h3>1. Delivery Address</h3>
+        <div class="address-form">
+          <div class="form-group">
+            <input type="text" id="fullName" placeholder="Full Name" required />
+          </div>
+          <div class="form-group">
+            <input type="email" id="email" placeholder="Email" required />
+          </div>
+          <div class="form-group">
+            <input type="tel" id="phone" placeholder="Phone Number" required />
+          </div>
+          <div class="form-group">
+            <textarea id="street" placeholder="Street Address" required></textarea>
+          </div>
+          <div class="form-row">
+            <input type="text" id="city" placeholder="City" required />
+            <input type="text" id="state" placeholder="State" required />
+            <input type="text" id="pincode" placeholder="Pincode" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Section -->
+      <div class="checkout-section">
+        <h3>2. Payment Method</h3>
+        <div class="payment-methods">
+          <label class="payment-option">
+            <input type="radio" name="payment" value="COD" checked />
+            <span>Cash on Delivery</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="UPI" />
+            <span>UPI/Digital Wallet</span>
+          </label>
+          <label class="payment-option">
+            <input type="radio" name="payment" value="Credit Card" />
+            <span>Credit/Debit Card</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Order Review -->
+      <div class="checkout-section">
+        <h3>3. Order Review</h3>
+        <div id="orderReview" class="order-review">
+          <!-- Items will be loaded here -->
+        </div>
+      </div>
+
+      <button id="placeOrderBtn" class="place-order-btn">Place Order</button>
+    </div>
+
+    <!-- Order Summary Sidebar -->
+    <div class="order-summary">
+      <h3>Order Summary</h3>
+      <div id="summaryItems"></div>
+      <div class="summary-total">
+        <span>Total</span>
+        <span>₹<span id="summaryTotal">0</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .checkout-content {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 20px;
+  }
+
+  .checkout-main {
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  .checkout-section {
+    padding: 24px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .checkout-section h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #212121;
+    font-weight: 600;
+  }
+
+  .address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-group {
+    display: flex;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #2874f0;
+    box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+
+  .form-row input {
+    padding: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+  }
+
+  .payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .payment-option {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .payment-option:hover {
+    background-color: #f8f9fa;
+  }
+
+  .payment-option input {
+    margin-right: 12px;
+    cursor: pointer;
+  }
+
+  .payment-option span {
+    font-size: 14px;
+    color: #212121;
+  }
+
+  .order-review {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .review-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .review-item-image {
+    width: 80px;
+    height: 80px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .review-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .review-item-info {
+    flex: 1;
+  }
+
+  .review-item-name {
+    font-weight: 500;
+    font-size: 13px;
+    margin-bottom: 4px;
+    color: #212121;
+  }
+
+  .review-item-price {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .place-order-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: #fb641b;
+    color: white;
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .place-order-btn:hover {
+    background-color: #e55100;
+  }
+
+  .order-summary {
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+  }
+
+  .order-summary h3 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #212121;
+  }
+
+  #summaryItems {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 16px;
+  }
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #666;
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    color: #212121;
+  }
+
+  @media (max-width: 768px) {
+    .checkout-content {
+      grid-template-columns: 1fr;
+    }
+
+    .order-summary {
+      position: static;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  function renderCheckoutReview() {
+    const orderReview = document.getElementById('orderReview');
+    const summaryItems = document.getElementById('summaryItems');
+
+    const itemsHTML = cart.map(item => `
+      <div class="review-item">
+        <div class="review-item-image">
+          <img src="${item.image}" alt="${item.name}" />
+        </div>
+        <div class="review-item-info">
+          <div class="review-item-name">${item.name}</div>
+          <div class="review-item-price">₹${item.price.toLocaleString()} × ${item.quantity}</div>
+        </div>
+      </div>
+    `).join('');
+
+    orderReview.innerHTML = itemsHTML;
+    summaryItems.innerHTML = cart.map(item => `
+      <div class="summary-item">
+        <span>${item.name} (${item.quantity})</span>
+        <span>₹${(item.price * item.quantity).toLocaleString()}</span>
+      </div>
+    `).join('');
+
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = subtotal - (subtotal * 0.1) + 50;
+    document.getElementById('summaryTotal').textContent = total.toLocaleString();
+  }
+
+  document.getElementById('placeOrderBtn').addEventListener('click', async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+
+    const fullName = document.getElementById('fullName').value;
+    const phone = document.getElementById('phone').value;
+    const street = document.getElementById('street').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const pincode = document.getElementById('pincode').value;
+    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+
+    if (!fullName || !phone || !street || !city || !state || !pincode) {
+      alert('Please fill all address fields');
+      return;
+    }
+
+    const shippingAddress = { name: fullName, phone, street, city, state, pincode };
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const discount = Math.round(subtotal * 0.1);
+    const deliveryFee = 50;
+    const totalAmount = subtotal;
+
+    try {
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          items: cart,
+          totalAmount,
+          discount,
+          deliveryFee,
+          shippingAddress,
+          paymentMethod,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.removeItem('cart');
+        window.location.href = `/order-success/${data.data._id}`;
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert('Failed to place order: ' + err.message);
+    }
+  });
+
+  renderCheckoutReview();
+</script>
