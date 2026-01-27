@@ -1,0 +1,319 @@
+<%- layout('layouts/boilerplate') %>
+
+<%- layout('layouts/boilerplate') %>
+
+
+<%- layout('layouts/boilerplate') %>
+
+<div class="container-fluid mt-4">
+  <div class="breadcrumb-nav mb-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" style="background: transparent;">
+        <li class="breadcrumb-item"><a href="/" style="text-decoration: none; color: #2874f0;">Home</a></li>
+        <!-- <li class="breadcrumb-item active" aria-current="page"><%= category %></li> -->
+      </ol>
+    </nav>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-3">
+      <!-- Sidebar Filters -->
+      <div class="card shadow-sm mb-3">
+        <div class="card-header bg-light">
+          <h5 class="mb-0">Filters</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label fw-bold">Price Range</label>
+            <div class="d-flex gap-2">
+              <input type="number" class="form-control form-control-sm" placeholder="Min" id="minPrice" />
+              <input type="number" class="form-control form-control-sm" placeholder="Max" id="maxPrice" />
+            </div>
+            <button class="btn btn-sm btn-primary mt-2 w-100" onclick="filterByPrice()">Apply</button>
+          </div>
+          <hr>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Rating</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rating4" value="4" onchange="filterByRating()" />
+              <label class="form-check-label" for="rating4">⭐⭐⭐⭐ & up</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rating3" value="3" onchange="filterByRating()" />
+              <label class="form-check-label" for="rating3">⭐⭐⭐ & up</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-9">
+      <!-- Category Header -->
+      <div style="background: linear-gradient(90deg, #2874f0 0%, #0a53be 100%); color: white; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+        <h2 class="mb-0">
+          <i class="fas fa-tag me-2"></i><%= category %>
+        </h2>
+        <small><%= products.length %> products available</small>
+      </div>
+
+      <% if(products.length > 0) { %>
+      <!-- Products Grid -->
+      <div class="products-grid">
+        <% products.forEach(product => { %>
+        <div class="product-card">
+          <a href="/product/<%= product._id %>" style="text-decoration: none; color: inherit;">
+            <div class="product-image">
+              <img src="<%= product.images?.[0] || 'https://via.placeholder.com/200' %>" alt="<%= product.name %>" />
+              <% if(product.discount) { %>
+              <div class="discount-badge"><%= product.discount %>% OFF</div>
+              <% } %>
+            </div>
+          </a>
+
+          <div class="product-info">
+            <a href="/product/<%= product._id %>" style="text-decoration: none; color: inherit;">
+              <h5 class="product-name"><%= product.name.substring(0, 30) %>...</h5>
+            </a>
+
+            <div class="product-rating">
+              <% for(let i = 0; i < Math.floor(product.rating || 0); i++) { %>
+                <i class="fas fa-star text-warning"></i>
+              <% } %>
+              <small class="text-muted">(<%= product.reviews ? product.reviews.length : 0 %> reviews)</small>
+            </div>
+
+            <div class="product-price">
+              <span class="current-price">₹<%= product.price %></span>
+              <% if(product.originalPrice) { %>
+                <span class="original-price">₹<%= product.originalPrice %></span>
+              <% } %>
+            </div>
+
+            <button class="add-to-cart-btn btn btn-primary btn-sm w-100 mt-2" onclick="addToCart('<%= product._id %>', '<%= product.name %>', <%= product.price %>)">
+              <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+            </button>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+      <% } else { %>
+      <div class="alert alert-info text-center py-5">
+        <i class="fas fa-inbox" style="font-size: 48px; color: #2874f0; margin-bottom: 20px; display: block;"></i>
+        <h4>No products found in this category</h4>
+        <p>Try browsing other categories or search for products</p>
+        <a href="/" class="btn btn-primary mt-3">Back to Home</a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .breadcrumb {
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-item a {
+    transition: all 0.3s;
+  }
+
+  .breadcrumb-item a:hover {
+    text-decoration: underline !important;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+  }
+
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    transition: all 0.3s;
+    background: white;
+  }
+
+  .product-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-color: #2874f0;
+  }
+
+  .product-image {
+    position: relative;
+    width: 100%;
+    height: 140px;
+    background: #f5f5f5;
+    border-radius: 2px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .discount-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #388e3c;
+    color: white;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 2px;
+  }
+
+  .product-name {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .product-rating {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .product-price {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .current-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #1976d2;
+  }
+
+  .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 12px;
+  }
+
+  .add-to-cart-btn {
+    font-size: 12px;
+    padding: 6px 12px !important;
+  }
+
+  @media (max-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 8px;
+    }
+
+    .product-card {
+      padding: 8px;
+    }
+
+    .product-image {
+      height: 120px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .col-lg-3 {
+      display: none;
+    }
+
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 6px;
+    }
+
+    .product-card {
+      padding: 6px;
+    }
+
+    .product-image {
+      height: 100px;
+    }
+
+    .product-name {
+      font-size: 11px;
+    }
+  }
+</style>
+
+<script>
+  function addToCart(id, name, price) {
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const existingItem = cart.find(item => item.id === id);
+    
+    if (existingItem) {
+      existingItem.qty += 1;
+    } else {
+      cart.push({ id, name, price, qty: 1 });
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+    
+    // Show success message
+    const btn = event.target;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check me-1"></i> Added!';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 1500);
+  }
+
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const badge = document.querySelector('.cart-count');
+    if (badge) {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-block' : 'none';
+    }
+  }
+
+  function filterByPrice() {
+    const min = parseFloat(document.getElementById('minPrice').value) || 0;
+    const max = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+    
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(card => {
+      const priceText = card.querySelector('.current-price').textContent;
+      const price = parseFloat(priceText.replace('₹', ''));
+      
+      if (price >= min && price <= max) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+
+  function filterByRating() {
+    const selectedRatings = [];
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      selectedRatings.push(parseInt(cb.value));
+    });
+
+    if (selectedRatings.length === 0) {
+      document.querySelectorAll('.product-card').forEach(card => card.style.display = 'block');
+      return;
+    }
+
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(card => {
+      const ratingStars = card.querySelectorAll('.fa-star').length;
+      const matches = selectedRatings.some(r => ratingStars >= r);
+      card.style.display = matches ? 'block' : 'none';
+    });
+  }
+
+  // Update cart count on page load
+  window.addEventListener('DOMContentLoaded', updateCartCount);
+</script>

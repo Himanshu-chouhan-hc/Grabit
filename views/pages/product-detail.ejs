@@ -495,41 +495,78 @@
   }
 
   function loadReviews() {
-    const reviewsList = document.getElementById('reviewsList');
-    const reviews = <%- JSON.stringify(product.reviews || []) %>;
-    
-    console.log('Loading reviews:', reviews);
-    
-    if (!reviews || reviews.length === 0) {
-      reviewsList.innerHTML = '<p style="padding: 20px; text-align: center; color: #999;">No reviews yet. Be the first to review!</p>';
-      return;
-    }
+  const reviewsList = document.getElementById('reviewsList');
+  const reviews = <%- JSON.stringify(product.reviews || []) %>;
+  
+  // Login user ki detail nikalna
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  
+  if (!reviews || reviews.length === 0) {
+    reviewsList.innerHTML = '<p style="padding: 20px; text-align: center; color: #999;">No reviews yet.</p>';
+    return;
+  }
 
-    reviewsList.innerHTML = reviews.map(review => `
+  reviewsList.innerHTML = reviews.map(review => {
+    // Check: Kya ye review usi user ka hai jo abhi login hai?
+    const isOwner = currentUser.id === review.reviewerId || currentUser._id === review.reviewerId;
+
+    return `
       <div class="review-item" style="padding: 16px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 16px;">
         <div style="flex-shrink: 0;">
           ${review.reviewerImage ? 
             `<img src="${review.reviewerImage}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;" />` :
-            `<div style="width: 48px; height: 48px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center;">
-              <i class="fas fa-user"></i>
-            </div>`
+            `<div style="width: 48px; height: 48px; border-radius: 50%; background: #e0e0e0; display: flex; align-items: center; justify-content: center;"><i class="fas fa-user"></i></div>`
           }
         </div>
         <div style="flex: 1;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-            <strong>${review.reviewer || 'Anonymous'}</strong>
-            <span style="color: #fb641b;">
-              ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-            </span>
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+              <strong>${review.reviewer || 'Anonymous'}</strong>
+              <span style="color: #fb641b;">
+                ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+              </span>
+            </div>
+            
+            ${isOwner ? `
+              <button onclick="deleteReview('${review._id}')" style="background:none; border:none; color:#999; cursor:pointer;">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            ` : ''}
           </div>
           <p style="color: #666; margin: 8px 0; font-size: 14px;">${review.comment}</p>
-          <small style="color: #999;">
-            ${new Date(review.date).toLocaleDateString()}
-          </small>
+          <small style="color: #999;">${new Date(review.date).toLocaleDateString()}</small>
         </div>
       </div>
-    `).join('');
+    `;
+  }).join('');
+}
+
+async function deleteReview(reviewId) {
+  if (!confirm('you want to delete review')) return;
+
+  const token = localStorage.getItem('token');
+  const productId = '<%= product._id %>';
+
+  try {
+    const response = await fetch(`/api/products/${productId}/review/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}` // Security ke liye token
+      }
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert('Review was deleted successfully.');
+      location.reload(); // Page refresh karein taaki update dikhe
+    } else {
+      alert('Error: ' + data.message);
+    }
+  } catch (err) {
+    alert('Server error: Review delete nahi ho paya.');
   }
+}
 
   function addToCart() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -624,6 +661,8 @@
       cartBadge.style.display = totalItems > 0 ? 'block' : 'none';
     }
   }
+
+  
 
   // Initialize
   document.addEventListener('DOMContentLoaded', function() {
