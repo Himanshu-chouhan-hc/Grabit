@@ -73,7 +73,7 @@ app.get("/account", (req, res) => {
 app.get("/mobiles", async (req, res) => {
   try {
     const products = await Product.find({ category: "Mobiles" });
-    res.render("pages/Mobiles", { products });
+    res.render("pages/Mobiles", { category: "Mobiles", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
@@ -82,7 +82,7 @@ app.get("/mobiles", async (req, res) => {
 app.get("/furniture", async (req, res) => {
   try {
     const products = await Product.find({ category: "Furniture" });
-    res.render("pages/Furniture", { products });
+    res.render("pages/Furniture", {category: "Furniture", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
@@ -91,16 +91,25 @@ app.get("/furniture", async (req, res) => {
 app.get("/fashion", async (req, res) => {
   try {
     const products = await Product.find({ category: "Fashion" });
-    res.render("pages/Fashion", { products });
+    res.render("pages/Fashion", { category: "Fashion", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
 });
 
+app.get("/beauty-toys", async (req, res) => {
+  try {
+    const products = await Product.find({ category: "Beauty & Toys" });
+    res.render("pages/Toy", { category: "Beauty & Toys", products });
+  } catch (err) {
+    res.status(500).send("Error loading page");
+  }                                                                     
+});
+
 app.get("/electronics", async (req, res) => {
   try {
     const products = await Product.find({ category: "Electronics" });
-    res.render("pages/Electronics", { products });
+    res.render("pages/Electronics", { category: "Electronics", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
@@ -109,7 +118,7 @@ app.get("/electronics", async (req, res) => {
 app.get("/appliances", async (req, res) => {
   try {
     const products = await Product.find({ category: "Appliances" });
-    res.render("pages/Appliances", { products });
+    res.render("pages/Appliances", { category: "Appliances", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
@@ -118,7 +127,7 @@ app.get("/appliances", async (req, res) => {
 app.get("/grocery", async (req, res) => {
   try {
     const products = await Product.find({ category: "Grocery" });
-    res.render("pages/Grocery", { products });
+    res.render("pages/Grocery", { category: "Grocery", products });
   } catch (err) {
     res.status(500).send("Error loading page");
   }
@@ -136,6 +145,8 @@ app.get("/product/:id", async (req, res) => {
     res.status(500).send("Error loading page");
   }
 });
+
+
 
 // Order success page
 app.get("/order-success/:orderId", async (req, res) => {
