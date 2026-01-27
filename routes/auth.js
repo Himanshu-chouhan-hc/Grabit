@@ -173,6 +173,45 @@ router.post('/api/auth/logout', (req, res) => {
   res.json({ success: true, message: 'Logged out successfully' });
 });
 
+// DELETE REVIEW ROUTE
+router.delete('/api/products/:productId/review/:reviewId', verifyToken, async (req, res) => {
+  try {
+    const { productId, reviewId } = req.params;
+    
+    // Product model ko yahan require karein (agar upar nahi kiya hai)
+    const Product = require('../module/product'); 
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ success: false, message: "Product nahi mila" });
+    }
+
+    // Review find karein array ke andar se
+    const review = product.reviews.id(reviewId);
+    if (!review) {
+      return res.status(404).json({ success: false, message: "Review nahi mila" });
+    }
+
+    // Security Check: Kya wahi user delete kar raha hai jisne review likha tha?
+    // Aapne verifyToken mein 'req.userId' set kiya hai, toh hum wahi use karenge
+    if (review.reviewerId.toString() !== req.userId.toString()) {
+      return res.status(403).json({ 
+        success: false, 
+        message: "Aap sirf apna review delete kar sakte hain!" 
+      });
+    }
+
+    // Review remove karein
+    product.reviews.pull(reviewId);
+    await product.save();
+
+    res.json({ success: true, message: "Review successfully delete" });
+  } catch (err) {
+    console.error('Delete error:', err);
+    res.status(500).json({ success: false, message: "Server error occurred" });
+  }
+});
+
 // Upload profile picture
 router.post('/api/auth/upload-picture', verifyToken, upload.single('profilePicture'), async (req, res) => {
   try {
