@@ -19,7 +19,7 @@ const sampleProducts = [
     price: 109999,
     originalPrice: 149999,
     category: "Mobiles",
-    image: "https://images.unsplash.com/photo-1610945415295-d9bbf7ad7929?w=400",
+    image: "https://i.ebayimg.com/images/g/2PYAAOSwtshmoUXN/s-l400.jpg",
     rating: 4.6,
     stock: 38,
     discount: 27,
