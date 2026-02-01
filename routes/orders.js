@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../module/order');
-const { verifyToken } = require('./auth');
+const  verifyToken  = require('../middleware/verify');
+
 
 // Create order
 router.post('/api/orders', verifyToken, async (req, res) => {
@@ -33,6 +34,31 @@ router.post('/api/orders', verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
+ router.post('/api/orders', verifyToken, async (req, res) => {
+    try {
+        const { items, totalAmount, discount, deliveryFee, shippingAddress, paymentMethod } = req.body;
+        const finalAmount = totalAmount - discount + deliveryFee;
+
+        const order = new Order({
+            userId: req.userId,
+            items,
+            totalAmount,
+            discount,
+            deliveryFee,
+            finalAmount,
+            shippingAddress,
+            paymentMethod,
+            estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
+        });
+
+        await order.save();
+        res.json({ success: true, message: 'Order created', data: order });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 
 // Get user orders
 router.get('/api/orders', verifyToken, async (req, res) => {

@@ -60,7 +60,7 @@
         <div class="product-card">
           <a href="/product/<%= product._id %>" style="text-decoration: none; color: inherit;">
             <div class="product-image">
-              <img src="<%= product.images?.[0] || 'https://via.placeholder.com/200' %>" alt="<%= product.name %>" />
+              <img src="<%= product.image %>" alt="<%= product.name %>" />
               <% if(product.discount) { %>
               <div class="discount-badge"><%= product.discount %>% OFF</div>
               <% } %>
@@ -86,7 +86,7 @@
               <% } %>
             </div>
 
-            <button class="add-to-cart-btn btn btn-primary btn-sm w-100 mt-2" onclick="addToCart('<%= product._id %>', '<%= product.name %>', <%= product.price %>)">
+            <button class="add-to-cart-btn btn btn-primary btn-sm w-100 mt-2" onclick="addToCart('<%= product._id %>', '<%= product.name %>', '<%= product.price %>')">
               <i class="fas fa-shopping-cart me-1"></i> Add to Cart
             </button>
           </div>

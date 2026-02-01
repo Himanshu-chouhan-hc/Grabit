@@ -4,6 +4,7 @@ const productData = require("./products.js");
 const Feature = require("../module/feature.js");
 const Product = require("../module/product.js");
 
+
 main()
   .then(() => {
     console.log("Connected to MongoDB");

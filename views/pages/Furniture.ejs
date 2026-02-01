@@ -63,7 +63,7 @@
         <div class="product-card">
           <a href="/product/<%= product._id %>" style="text-decoration: none; color: inherit;">
             <div class="product-image">
-              <img src="<%= product.images?.[0] || 'https://via.placeholder.com/200' %>" alt="<%= product.name %>" />
+              <img src="<%= product.image || 'https://via.placeholder.com/200' %>" alt="<%= product.name %>" />
               <% if(product.discount) { %>
               <div class="discount-badge"><%= product.discount %>% OFF</div>
               <% } %>
