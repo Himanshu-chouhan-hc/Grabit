@@ -1,0 +1,25 @@
+{
+  "name": "grabit",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "start": "node app.js"
+},
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cookies-parser": "^1.2.0",
+    "dotenv": "^17.3.1",
+    "ejs": "^4.0.1",
+    "ejs-mate": "^4.0.0",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.5",
+    "multer": "^2.0.2",
+    "path": "^0.12.7",
+    "view-engine": "^1.1.1"
+  }
+}
