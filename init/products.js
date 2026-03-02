@@ -7,6 +7,12 @@ const sampleProducts = [
     originalPrice: 139999,
     category: "Mobiles",
     image: "https://images.unsplash.com/photo-1592286927505-1def25115558?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1592286927505-1def25115558?w=400",
+      "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=400",
+      "https://images.unsplash.com/photo-1512941691920-c894ddcb4d4f?w=400",
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400"
+    ],
     rating: 4.5,
     stock: 45,
     discount: 15,
@@ -20,6 +26,12 @@ const sampleProducts = [
     originalPrice: 149999,
     category: "Mobiles",
     image: "https://i.ebayimg.com/images/g/2PYAAOSwtshmoUXN/s-l400.jpg",
+    images: [
+      "https://i.ebayimg.com/images/g/2PYAAOSwtshmoUXN/s-l400.jpg",
+      "https://images.unsplash.com/photo-1511291466901-4d42cd3b1a29?w=400",
+      "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=400",
+      "https://images.unsplash.com/photo-1519148518688-fdf282e2f130?w=400"
+    ],
     rating: 4.6,
     stock: 38,
     discount: 27,
@@ -33,6 +45,12 @@ const sampleProducts = [
     originalPrice: 79999,
     category: "Mobiles",
     image: "https://oasis.opstatics.com/content/dam/oasis/page/2023/cn/12/12-black.png",
+    images: [
+      "https://oasis.opstatics.com/content/dam/oasis/page/2023/cn/12/12-black.png",
+      "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=400",
+      "https://images.unsplash.com/photo-1512941691920-c894ddcb4d4f?w=400",
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400"
+    ],
     rating: 4.3,
     stock: 62,
     discount: 19,
@@ -46,6 +64,12 @@ const sampleProducts = [
     originalPrice: 74999,
     category: "Mobiles",
     image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=400",
+      "https://images.unsplash.com/photo-1519148518688-fdf282e2f130?w=400",
+      "https://images.unsplash.com/photo-1511291466901-4d42cd3b1a29?w=400",
+      "https://images.unsplash.com/photo-1592286927505-1def25115558?w=400"
+    ],
     rating: 4.2,
     stock: 75,
     discount: 20,
@@ -61,6 +85,12 @@ const sampleProducts = [
     originalPrice: 49999,
     category: "Furniture",
     image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400",
+      "https://images.unsplash.com/photo-1516623897497-c1985b38383c?w=400",
+      "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400"
+    ],
     rating: 4.4,
     stock: 12,
     discount: 50,
@@ -74,6 +104,12 @@ const sampleProducts = [
     originalPrice: 24999,
     category: "Furniture",
     image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400",
+      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400",
+      "https://images.unsplash.com/photo-1533090161692-a6b0b8e8553b?w=400",
+      "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400"
+    ],
     rating: 4.3,
     stock: 18,
     discount: 36,
@@ -87,6 +123,12 @@ const sampleProducts = [
     originalPrice: 14999,
     category: "Furniture",
     image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400",
+      "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=400",
+      "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400",
+      "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400"
+    ],
     rating: 4.1,
     stock: 35,
     discount: 40,
@@ -102,6 +144,12 @@ const sampleProducts = [
     originalPrice: 999,
     category: "Fashion",
     image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+      "https://images.unsplash.com/photo-1513744103686-de01f88b5053?w=400",
+      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400",
+      "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400"
+    ],
     rating: 4.2,
     stock: 150,
     discount: 50,
@@ -115,6 +163,12 @@ const sampleProducts = [
     originalPrice: 1999,
     category: "Fashion",
     image: "https://i.pinimg.com/736x/c6/83/ad/c683ad2b272d35c1c2593d1a55372902.jpg",
+    images: [
+      "https://i.pinimg.com/736x/c6/83/ad/c683ad2b272d35c1c2593d1a55372902.jpg",
+      "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=400",
+      "https://images.unsplash.com/photo-1542272604-787c62d465d1?w=400",
+      "https://images.unsplash.com/photo-1541099810657-40b6b3afeae2?w=400"
+    ],
     rating: 4.4,
     stock: 120,
     discount: 50,
@@ -128,6 +182,12 @@ const sampleProducts = [
     originalPrice: 2499,
     category: "Fashion",
     image: "https://assets.myntassets.com/h_200,w_200,c_fill,g_auto/h_1440,q_100,w_1080/v1/assets/images/22223562/2023/3/3/22c14707-fcf7-457e-9dd0-5b914b8a33f51677867998232CantabilMenNavyBluePoloCollarT-shirt1.jpg",
+    images: [
+      "https://assets.myntassets.com/h_200,w_200,c_fill,g_auto/h_1440,q_100,w_1080/v1/assets/images/22223562/2023/3/3/22c14707-fcf7-457e-9dd0-5b914b8a33f51677867998232CantabilMenNavyBluePoloCollarT-shirt1.jpg",
+      "https://images.unsplash.com/photo-1591047990975-31493a418c12?w=400",
+      "https://images.unsplash.com/photo-1591047990975-31493a418c12?w=400",
+      "https://images.unsplash.com/photo-1621705159922-67e1b16c01c0?w=400"
+    ],
     rating: 4.3,
     stock: 85,
     discount: 48,
@@ -143,6 +203,12 @@ const sampleProducts = [
     originalPrice: 69999,
     category: "Appliances",
     image: "https://www.lg.com/content/dam/channel/wcms/in/images/wm/fhp1412z9b/gallery/FHP1412Z9B-DZ-06.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+    images: [
+      "https://www.lg.com/content/dam/channel/wcms/in/images/wm/fhp1412z9b/gallery/FHP1412Z9B-DZ-06.jpg/_jcr_content/renditions/thum-1600x1062.jpeg",
+      "https://images.unsplash.com/photo-1517668808822-9ebb02ae2a0e?w=400",
+      "https://images.unsplash.com/photo-1517668808822-9ebb02ae2a0e?w=400",
+      "https://images.unsplash.com/photo-1517668808822-9ebb02ae2a0e?w=400"
+    ],
     rating: 4.5,
     stock: 22,
     discount: 43,
@@ -156,8 +222,14 @@ const sampleProducts = [
     originalPrice: 19999,
     category: "Appliances",
     image: "https://tse4.mm.bing.net/th/id/OIP.02bAJeWCcQVsYuKmlkUwTAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-    rating: 4.2,
-    stock: 30,
+    images: [
+      "https://tse4.mm.bing.net/th/id/OIP.02bAJeWCcQVsYuKmlkUwTAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400"
+    ],
+    rating: 4.3,
+    stock: 35,
     discount: 35,
     isBestDeal: true,
     isFlashDeal: false,
@@ -169,6 +241,12 @@ const sampleProducts = [
     originalPrice: 34999,
     category: "Appliances",
     image: "https://tse4.mm.bing.net/th/id/OIP.AxTMPro-HelnnrHha7ahTwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+    images: [
+      "https://tse4.mm.bing.net/th/id/OIP.AxTMPro-HelnnrHha7ahTwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400",
+      "https://images.unsplash.com/photo-1584568694244-14fbdf83bd30?w=400"
+    ],
     rating: 4.3,
     stock: 25,
     discount: 46,
@@ -184,6 +262,12 @@ const sampleProducts = [
     originalPrice: 119999,
     category: "Electronics",
     image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400",
+      "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400"
+    ],
     rating: 4.6,
     stock: 18,
     discount: 21,
@@ -197,6 +281,12 @@ const sampleProducts = [
     originalPrice: 9999,
     category: "Electronics",
     image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+      "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400",
+      "https://images.unsplash.com/photo-1487215078519-e21cc028cb29?w=400",
+      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+    ],
     rating: 4.4,
     stock: 65,
     discount: 50,
@@ -210,6 +300,12 @@ const sampleProducts = [
     originalPrice: 29999,
     category: "Electronics",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+      "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400",
+      "https://images.unsplash.com/photo-1617119307282-5b32d4650c67?w=400",
+      "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"
+    ],
     rating: 4.3,
     stock: 48,
     discount: 50,
@@ -225,6 +321,12 @@ const sampleProducts = [
     originalPrice: 399,
     category: "Grocery",
     image: "https://cdn0.woolworths.media/content/wowproductimages/large/155084.jpg",
+    images: [
+      "https://cdn0.woolworths.media/content/wowproductimages/large/155084.jpg",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400"
+    ],
     rating: 4.5,
     stock: 200,
     discount: 25,
@@ -238,6 +340,12 @@ const sampleProducts = [
     originalPrice: 599,
     category: "Grocery",
     image: "https://th.bing.com/th/id/OIP.thvZtpP_X1jeI4eDVzxMFgHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3",
+    images: [
+      "https://th.bing.com/th/id/OIP.thvZtpP_X1jeI4eDVzxMFgHaHa?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3",
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400",
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400",
+      "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400"
+    ],
     rating: 4.6,
     stock: 150,
     discount: 33,
@@ -251,6 +359,12 @@ const sampleProducts = [
     originalPrice: 549,
     category: "Grocery",
     image: "https://cheflolaskitchen.com/wp-content/uploads/2023/12/Almond-Butter-5-scaled.jpg",
+    images: [
+      "https://cheflolaskitchen.com/wp-content/uploads/2023/12/Almond-Butter-5-scaled.jpg",
+      "https://images.unsplash.com/photo-1599599810694-7a2b4cb8a6c8?w=400",
+      "https://images.unsplash.com/photo-1599599810694-7a2b4cb8a6c8?w=400",
+      "https://images.unsplash.com/photo-1599599810694-7a2b4cb8a6c8?w=400"
+    ],
     rating: 4.4,
     stock: 120,
     discount: 36,
@@ -266,6 +380,12 @@ const sampleProducts = [
     originalPrice: 1199,
     category: "Beauty & Toys",
     image: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400",
+    images: [
+      "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400",
+      "https://images.unsplash.com/photo-1596289519412-a4a37322e64c?w=400",
+      "https://images.unsplash.com/photo-1596289519412-a4a37322e64c?w=400",
+      "https://images.unsplash.com/photo-1556228578-8c89e6adf883?w=400"
+    ],
     rating: 4.2,
     stock: 90,
     discount: 50,
@@ -279,6 +399,12 @@ const sampleProducts = [
     originalPrice: 2999,
     category: "Beauty & Toys",
     image: "https://m.media-amazon.com/images/I/81lnrWWei4L._AC_SL1500_.jpg",
+    images: [
+      "https://m.media-amazon.com/images/I/81lnrWWei4L._AC_SL1500_.jpg",
+      "https://images.unsplash.com/photo-1520523839897-bd0b52aaf81f?w=400",
+      "https://images.unsplash.com/photo-1520523839897-bd0b52aaf81f?w=400",
+      "https://images.unsplash.com/photo-1520523839897-bd0b52aaf81f?w=400"
+    ],
     rating: 4.3,
     stock: 60,
     discount: 50,

@@ -67,7 +67,7 @@
     <button class="arrow next" onclick="nextSlide()">&#10095;</button>
     <div class="slider-dots">
         <% for(let i = 0; i < features.length; i++){ %>
-          <span class="slider-dot <%= i === 0 ? 'active' : '' %>" onclick="goToSlide(<%= i %>)"></span>
+          <span class="slider-dot <%= i === 0 ? 'active' : '' %>" onclick="goToSlide('<%= i %>')"></span>
         <% } %>
     </div>
   </div>
@@ -96,7 +96,7 @@
                 <span class="current-price">₹<%= product.price.toLocaleString() %></span>
                 <span class="original-price">₹<%= product.originalPrice.toLocaleString() %></span>
               </div>
-              <button class="add-to-cart-btn" onclick="addProductToCart(event, '<%= product._id %>', '<%= product.name %>', <%= product.price %>, '<%= product.image %>')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+              <button class="add-to-cart-btn" onclick="addProductToCart(event, '<%= product._id %>', '<%= product.name %>', '<%= product.price %>' , '<%= product.image %>')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
             </div>
           </div>
         <% }); %>

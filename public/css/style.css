@@ -1120,3 +1120,25 @@ body {
     }
 }
 
+.slider-wrapper {
+  display: flex;
+  transition: transform 0.6s ease-in-out;
+  overflow: hidden;
+}
+.slider-wrapper img {
+  width: 100vw;
+  flex-shrink: 0;
+}
+.slider-dot {
+  height: 12px;
+  width: 12px;
+  background: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  margin: 0 4px;
+}
+.slider-dot.active {
+  background: #717171;
+}
+

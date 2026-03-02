@@ -38,6 +38,9 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  images: [{
+    type: String,
+  }],
   rating: {
     type: Number,
     min: 0,

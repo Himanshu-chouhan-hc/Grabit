@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const path = require('path');
 const ejsMate = require('ejs-mate');
 const cookieParser = require('cookie-parser');
+require("dotenv").config();
 
 // Models
 const Feature = require('./module/feature');
@@ -29,10 +30,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // DB Connection
-const mongoURL = "mongodb://127.0.0.1:27017/grabitstore";
-mongoose.connect(mongoURL)
+const MONGO_URI = process.env.ATLAS_DB;
+if (!MONGO_URI) {
+  throw new Error("❌ Mongo URI not defined. Check your .env file.");
+}
+
+mongoose.connect(MONGO_URI)
   .then(() => console.log("✅ Connected to DB"))
-  .catch((err) => console.log("❌ DB Error:", err));
+  .catch(err => console.error("❌ DB Error:", err));
+
 
 // --- Route Mounting ---
 app.use(productRoutes);

@@ -39,6 +39,12 @@ const orderSchema = new mongoose.Schema({
     enum: ["Credit Card", "Debit Card", "UPI", "Wallet", "COD"],
     default: "COD",
   },
+  paymentDetails: {
+    // store minimal info for demonstration; in real app never store CVV
+    cardNumber: String,
+    cardHolder: String,
+    expiry: String,
+  },
   paymentStatus: {
     type: String,
     enum: ["Pending", "Completed", "Failed"],
@@ -61,13 +67,6 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-// Generate unique order number
-orderSchema.pre("save", async function (next) {
-  if (!this.orderNumber) {
-    this.orderNumber = "ORD" + Date.now();
-  }
-  next();
-});
 
 const Order = mongoose.model("Order", orderSchema);
 

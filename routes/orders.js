@@ -7,12 +7,16 @@ const  verifyToken  = require('../middleware/verify');
 // Create order
 router.post('/api/orders', verifyToken, async (req, res) => {
   try {
-    const { items, totalAmount, discount, deliveryFee, shippingAddress, paymentMethod } = req.body;
+    const { items, totalAmount, discount, deliveryFee, shippingAddress, paymentMethod, paymentDetails } = req.body;
 
     const finalAmount = totalAmount - discount + deliveryFee;
 
-    const order = new Order({
+    // generate unique order number here instead of relying on schema hook
+    const orderNumber = 'ORD' + Date.now();
+
+    const orderData = {
       userId: req.userId,
+      orderNumber,
       items,
       totalAmount,
       discount,
@@ -21,7 +25,15 @@ router.post('/api/orders', verifyToken, async (req, res) => {
       shippingAddress,
       paymentMethod,
       estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
-    });
+    };
+
+    if (paymentDetails) {
+      orderData.paymentDetails = paymentDetails;
+      // mark payment as completed for simulation
+      orderData.paymentStatus = 'Completed';
+    }
+
+    const order = new Order(orderData);
 
     await order.save();
 
@@ -31,32 +43,9 @@ router.post('/api/orders', verifyToken, async (req, res) => {
       data: order,
     });
   } catch (err) {
+    console.error('Order creation error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
-});
-
- router.post('/api/orders', verifyToken, async (req, res) => {
-    try {
-        const { items, totalAmount, discount, deliveryFee, shippingAddress, paymentMethod } = req.body;
-        const finalAmount = totalAmount - discount + deliveryFee;
-
-        const order = new Order({
-            userId: req.userId,
-            items,
-            totalAmount,
-            discount,
-            deliveryFee,
-            finalAmount,
-            shippingAddress,
-            paymentMethod,
-            estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)
-        });
-
-        await order.save();
-        res.json({ success: true, message: 'Order created', data: order });
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
 });
 
 
