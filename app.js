@@ -55,7 +55,20 @@ app.get("/", async (req, res) => {
     const features = await Feature.find({});
     const bestDeals = await Product.find({ isBestDeal: true }).limit(8);
     const flashDeals = await Product.find({ isFlashDeal: true }).limit(5);
-    res.render("pages/index", { features, bestDeals, flashDeals });
+
+    // determine countdown expiry (earliest flashDealExpiry among products)
+    let flashExpiry = null;
+    if (flashDeals && flashDeals.length) {
+      flashExpiry = flashDeals.reduce((min, p) => {
+        if (p.flashDealExpiry) {
+          const d = new Date(p.flashDealExpiry);
+          return min === null || d < min ? d : min;
+        }
+        return min;
+      }, null);
+    }
+
+    res.render("pages/index", { features, bestDeals, flashDeals, flashExpiry });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error loading home page");

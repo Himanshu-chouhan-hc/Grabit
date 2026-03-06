@@ -34,7 +34,7 @@ router.post('/api/auth/signup', async (req, res) => {
         const user = new User({ name, email, password });
         await user.save();
 
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '30d' });
         res.json({ success: true, user, token });
     } catch (err) {
         console.error('Signup error:', err);
@@ -59,7 +59,7 @@ router.post('/api/auth/login', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: '30d' });
         res.json({ success: true, user, token });
     } catch (err) {
         console.error('Login error:', err);
@@ -91,6 +91,20 @@ router.post('/api/auth/profile/image', verifyToken, upload.single('profileImage'
         const imagePath = '/uploads/' + req.file.filename;
         const user = await User.findByIdAndUpdate(req.userId, { profileImage: imagePath }, { new: true });
         res.json({ success: true, data: user });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Picture upload endpoint (matching frontend)
+router.post('/api/auth/upload-picture', verifyToken, upload.single('profilePicture'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No file uploaded' });
+        }
+        const imagePath = '/uploads/' + req.file.filename;
+        const user = await User.findByIdAndUpdate(req.userId, { profileImage: imagePath }, { new: true });
+        res.json({ success: true, profileImage: imagePath, data: user });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
     }

@@ -125,6 +125,14 @@ if (pictureInput) {
 
     try {
       const token = localStorage.getItem('token');
+      console.log('Token from localStorage:', token ? 'exists' : 'missing');
+      
+      if (!token) {
+        alert('Please login first to upload a picture');
+        window.location.href = '/auth';
+        return;
+      }
+
       const response = await fetch('/api/auth/upload-picture', {
         method: 'POST',
         headers: {

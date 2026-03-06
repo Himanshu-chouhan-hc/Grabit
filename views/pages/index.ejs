@@ -110,7 +110,7 @@
       <h2>⚡ Flash Deals</h2>
       <span class="timer">Ends in: 02:45:30</span>
     </div>
-    <div class="flash-products">
+    <div class="flash-products-grid">
       <% if(flashDeals && flashDeals.length > 0) { %>
         <% flashDeals.forEach(product => { %>
           <div class="flash-product-card" onclick="goToProduct('<%= product._id %>')">
@@ -120,8 +120,13 @@
             </div>
             <div class="flash-info">
               <h4><%= product.name %></h4>
-              <p class="flash-price">₹<%= product.price.toLocaleString() %></p>
-              <p class="flash-original">₹<%= product.originalPrice.toLocaleString() %></p>
+              <div class="flash-rating">
+                <span class="stars"><%- '★'.repeat(Math.floor(product.rating)) %>☆ <% if(product.rating % 1 !== 0) { %>★<% } %></span>
+              </div>
+              <div class="flash-price-section">
+                <span class="flash-price">₹<%= product.price.toLocaleString() %></span>
+                <span class="flash-original">₹<%= product.originalPrice.toLocaleString() %></span>
+              </div>
               <div class="stock-bar">
                 <div class="stock-fill" style="width: <%= Math.max(20, 100 - product.stock / 10) %>%"></div>
               </div>
@@ -197,3 +202,5 @@
       </div>
     </div>
   </footer>
+
+<script src="/js/slider.js">    </script>
