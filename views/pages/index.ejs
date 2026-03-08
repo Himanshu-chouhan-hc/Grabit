@@ -105,32 +105,30 @@
   </div>
 
   <!-- Flash Deals Section -->
-  <div class="flash-deals-section">
+  <div class="deals-section">
     <div class="section-header">
       <h2>⚡ Flash Deals</h2>
       <span class="timer">Ends in: 02:45:30</span>
     </div>
-    <div class="flash-products-grid">
+    <div class="products-grid">
       <% if(flashDeals && flashDeals.length > 0) { %>
         <% flashDeals.forEach(product => { %>
-          <div class="flash-product-card" onclick="goToProduct('<%= product._id %>')">
-            <div class="flash-image">
+          <div class="product-card" onclick="goToProduct('<%= product._id %>')">
+            <div class="product-image">
               <img src="<%= product.image %>" alt="<%= product.name %>" />
               <div class="flash-badge">FLASH</div>
             </div>
-            <div class="flash-info">
-              <h4><%= product.name %></h4>
-              <div class="flash-rating">
+            <div class="product-info">
+              <h3 class="product-name"><%= product.name %></h3>
+              <div class="product-rating">
                 <span class="stars"><%- '★'.repeat(Math.floor(product.rating)) %>☆ <% if(product.rating % 1 !== 0) { %>★<% } %></span>
+                <span class="review-count">(<%= product.reviews ? product.reviews.length : 0 %> reviews)</span>
               </div>
-              <div class="flash-price-section">
-                <span class="flash-price">₹<%= product.price.toLocaleString() %></span>
-                <span class="flash-original">₹<%= product.originalPrice.toLocaleString() %></span>
+              <div class="product-price">
+                <span class="current-price">₹<%= product.price.toLocaleString() %></span>
+                <span class="original-price">₹<%= product.originalPrice.toLocaleString() %></span>
               </div>
-              <div class="stock-bar">
-                <div class="stock-fill" style="width: <%= Math.max(20, 100 - product.stock / 10) %>%"></div>
-              </div>
-              <p class="stock-text">Only <%= Math.max(10, 100 - product.stock) %> left</p>
+              <button class="add-to-cart-btn" onclick="addProductToCart(event, '<%= product._id %>', '<%= product.name %>', '<%= product.price %>' , '<%= product.image %>')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
             </div>
           </div>
         <% }); %>
@@ -202,5 +200,3 @@
       </div>
     </div>
   </footer>
-
-<script src="/js/slider.js">    </script>
