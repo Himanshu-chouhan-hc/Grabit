@@ -16,7 +16,9 @@ function loadReviews() {
   }
 
   reviewsList.innerHTML = reviews.map(review => {
-    const isOwner = currentUser.id === review.reviewerId || currentUser._id === review.reviewerId;
+    const reviewerId = review.reviewerId || review.reviewer?._id || review.reviewer;
+    const currentUserId = currentUser.id || currentUser._id;
+    const isOwner = currentUserId && reviewerId && currentUserId === reviewerId;
 
     return `
       <div class="review-item" style="padding: 16px; border-bottom: 1px solid #e0e0e0; display: flex; gap: 16px;">
@@ -137,7 +139,7 @@ function submitReview() {
       rating: parseInt(rating), 
       comment, 
       reviewer: user.name || 'User',
-      reviewerId: user.id,
+      reviewerId: user.id || user._id,
       reviewerImage: user.profileImage
     }),
   })

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../module/product');
+const verifyToken = require('../middleware/verify');
 
 // Get all products with filters
 router.get('/api/products', async (req, res) => {
@@ -119,6 +120,42 @@ router.post('/api/products/:id/review', async (req, res) => {
     res.json({ success: true, data: product });
   } catch (err) {
     console.error('Review submission error:', err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Delete review
+router.delete('/api/products/:id/review/:reviewId', verifyToken, async (req, res) => {
+  try {
+    const { id, reviewId } = req.params;
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({ success: false, message: 'Product not found' });
+    }
+
+    const review = product.reviews.id(reviewId);
+    if (!review) {
+      return res.status(404).json({ success: false, message: 'Review not found' });
+    }
+
+    if (String(review.reviewerId) !== String(req.userId)) {
+      return res.status(403).json({ success: false, message: 'You are not authorized to delete this review' });
+    }
+
+    // Remove review safely even when subdocument methods aren't available.
+    product.reviews = product.reviews.filter(r => String(r._id) !== String(reviewId));
+
+    if (product.reviews.length > 0) {
+      product.rating = product.reviews.reduce((sum, r) => sum + r.rating, 0) / product.reviews.length;
+    } else {
+      product.rating = 0;
+    }
+
+    await product.save();
+    res.json({ success: true, message: 'Review deleted successfully', data: product });
+  } catch (err) {
+    console.error('Review deletion error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });

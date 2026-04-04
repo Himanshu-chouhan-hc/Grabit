@@ -40,7 +40,8 @@ loginForm.addEventListener('submit', async (e) => {
 
     if (data.success) {
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const storedUser = { ...data.user, id: data.user.id || data.user._id };
+      localStorage.setItem('user', JSON.stringify(storedUser));
       window.location.href = '/account';
     } else {
       alert(data.message);
@@ -81,7 +82,8 @@ signupForm.addEventListener('submit', async (e) => {
 
     if (data.success) {
       localStorage.setItem('token', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const storedUser = { ...data.user, id: data.user.id || data.user._id };
+      localStorage.setItem('user', JSON.stringify(storedUser));
       alert('Account created successfully!');
       window.location.href = '/account';
     } else {

@@ -143,13 +143,16 @@ app.get("/product/:id", async (req, res) => {
   } catch (err) { res.status(500).send("Error"); }
 });
 
+
+
 // Order Success Page
 app.get("/order-success/:orderId", (req, res) => {
   res.render("pages/order-success", { orderId: req.params.orderId });
 });
 
 // Server Listen
-const port = 9000;
-app.listen(port, () => {
-  console.log(`🚀 Server is running on http://localhost:${port}`);
+const port = process.env.PORT || 9000; 
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server is running on port ${port}`);
 });
