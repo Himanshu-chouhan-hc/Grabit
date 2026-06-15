@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg py-2" style="background: linear-gradient(90deg, #2874f0 0%, #0a53be 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
   <div class="container-fluid d-flex align-items-center px-4">
 
-    <div class="d-flex flex-column align-items-left me-4" style="min-width: 160px;">
+    <div class="d-flex flex-column align-items-start me-4" style="min-width: 160px;">
       <a class="navbar-brand text-white fw-bold m-0 p-0" href="/" style="font-size: 24px; letter-spacing: -0.5px;">
         <i class="fas fa-shopping-basket me-2"></i>Grabit
       </a>
@@ -11,22 +11,22 @@
     </div>
 
     <div class="flex-grow-1 mx-lg-4">
-      <form class="d-flex shadow-sm" style="max-width: 500px;">
-        <input class="form-control border-0 rounded-0 rounded-start py-2" 
-               type="search" 
-               placeholder="Search for products, brands and more" 
-               style="font-size: 14px; padding: 10px 16px !important;"/>
-        <button class="btn bg-white border-0 rounded-0 rounded-end text-primary px-3" type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-    </div>
-  
+      <form action="/search" method="GET" class="d-flex shadow-sm" style="max-width: 500px;">
+  <input
+    class="form-control border-0 rounded-0 rounded-start py-2"
+    type="search"
+    name="q"
+    placeholder="Search for products, brands and more"
+  />
 
+  <button class="btn bg-white border-0 rounded-0 rounded-end text-primary px-3" type="submit">
+    <i class="fas fa-search"></i>
+  </button>
+</form>
     </div>
 
-    <button class="navbar-toggler border-white ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#grabitNavContent">
-      <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+    <button class="navbar-toggler border-white ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#grabitNavContent" aria-controls="grabitNavContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon custom-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse flex-grow-0 ms-4" id="grabitNavContent">

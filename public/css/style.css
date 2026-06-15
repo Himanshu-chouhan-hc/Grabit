@@ -84,7 +84,7 @@ body {
     vertical-align: middle;
 }
 
-/* slider */
+/* ========== SLIDER SECTION ========== */
 .slider-container {
     width: 100%;
     overflow: hidden;
@@ -92,26 +92,42 @@ body {
     margin: 16px 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #fff;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    height: 320px;
+    height: 450px;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .slider-wrapper {
     display: flex;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 100%;
+    overflow: hidden;
     height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
 .slider-wrapper img {
     width: 100%;
+    min-width: 100%;
+    flex: 0 0 100%;
     height: 100%;
-    object-fit: cover;
-    flex-shrink: 0;
+    object-fit: contain;
+    object-position: center;
     display: block;
     background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    transition: transform 0.3s ease;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.slider-wrapper img:hover {
+    transform: scale(1.02);
 }
 
 .slider-wrapper h2 {
@@ -126,7 +142,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
-    font-size: 24px;
+    font-size: 20px;
     padding: 10px 14px;
     cursor: pointer;
     z-index: 10;
@@ -137,12 +153,17 @@ body {
     justify-content: center;
     width: 42px;
     height: 42px;
+    font-weight: bold;
 }
 
 .slider-container .arrow:hover {
     background-color: rgba(0, 0, 0, 0.85);
-    transform: translateY(-50%) scale(1.05);
+    transform: translateY(-50%) scale(1.1);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.slider-container .arrow:active {
+    transform: translateY(-50%) scale(0.95);
 }
 
 .slider-container .arrow.prev {
@@ -162,16 +183,21 @@ body {
     display: flex;
     gap: 8px;
     z-index: 10;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0 16px;
+    max-width: 90%;
 }
 
 .slider-dot {
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.6);
     border: 2px solid white;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
 .slider-dot:hover {
@@ -183,6 +209,135 @@ body {
     background-color: #2874f0;
     border-color: #2874f0;
     box-shadow: 0 0 8px rgba(40, 116, 240, 0.6);
+    width: 16px;
+}
+
+/* ========== RESPONSIVE SLIDER ========== */
+
+/* Tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+    .slider-container {
+        height: 350px;
+        margin: 12px 0;
+    }
+
+    .slider-container .arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        padding: 8px 12px;
+        left: 8px;
+    }
+
+    .slider-container .arrow.next {
+        right: 8px;
+    }
+
+    .slider-dots {
+        bottom: 12px;
+        gap: 6px;
+    }
+
+    .slider-dot {
+        width: 10px;
+        height: 10px;
+    }
+
+    .slider-dot.active {
+        width: 14px;
+    }
+}
+
+/* Mobile (480px - 768px) */
+@media (max-width: 768px) {
+    .slider-container {
+        height: 280px;
+        margin: 8px 0;
+        border-radius: 2px;
+    }
+
+    .slider-container .arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+        padding: 6px 10px;
+        left: 6px;
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    .slider-container .arrow.next {
+        right: 6px;
+    }
+
+    .slider-container .arrow:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        transform: translateY(-50%) scale(1.08);
+    }
+
+    .slider-dots {
+        bottom: 10px;
+        gap: 5px;
+        padding: 0 12px;
+    }
+
+    .slider-dot {
+        width: 9px;
+        height: 9px;
+        border: 1.5px solid white;
+    }
+
+    .slider-dot.active {
+        width: 12px;
+    }
+}
+
+/* Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+    .slider-container {
+        height: 220px;
+        margin: 8px 0;
+        border-radius: 2px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .slider-container .arrow {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        padding: 4px 8px;
+        left: 4px;
+        background-color: rgba(0, 0, 0, 0.65);
+    }
+
+    .slider-container .arrow.next {
+        right: 4px;
+    }
+
+    .slider-container .arrow:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+        transform: translateY(-50%) scale(1.05);
+    }
+
+    .slider-dots {
+        bottom: 8px;
+        gap: 4px;
+        padding: 0 8px;
+    }
+
+    .slider-dot {
+        width: 8px;
+        height: 8px;
+        border: 1px solid white;
+    }
+
+    .slider-dot.active {
+        width: 10px;
+        box-shadow: 0 0 6px rgba(40, 116, 240, 0.5);
+    }
+
+    .slider-wrapper img {
+        object-fit: contain;
+    }
 }
 
 /* Page Container */
@@ -306,7 +461,8 @@ body {
 .product-image {
     position: relative;
     width: 100%;
-    height: 200px;
+    min-height: 200px;
+    aspect-ratio: 4 / 3;
     background-color: #f8f9fa;
     display: flex;
     align-items: center;
@@ -610,7 +766,8 @@ body {
     }
 
     .product-image {
-        height: 140px;
+        min-height: 140px;
+        height: auto;
     }
 
 
@@ -746,6 +903,59 @@ body {
         grid-template-columns: 1fr;
         gap: 12px;
     }
+}
+
+@media (max-width: 382px) {
+    .products-grid {
+        grid-template-columns: 1fr;
+        gap: 6px;
+        padding: 4px;
+    }
+
+    .product-card {
+        padding: 6px;
+        border-radius: 3px;
+    }
+
+    .product-info {
+        padding: 10px;
+    }
+
+    .product-image {
+        height: 120px;
+        min-height: auto;
+        aspect-ratio: 4 / 3;
+    }
+
+    .product-name {
+        font-size: 12px !important;
+        margin-bottom: 8px;
+    }
+
+    .product-price {
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .current-price {
+        font-size: 13px;
+    }
+
+    .original-price {
+        font-size: 10px;
+    }
+
+    .discount-badge {
+        font-size: 11px;
+        padding: 2px 6px;
+    }
+
+    .add-to-cart-btn {
+        font-size: 11px;
+        padding: 6px 8px !important;
+        width: 100%;
+    }
+}
 
     .footer-section h4 {
         font-size: 14px;
@@ -1009,13 +1219,80 @@ body {
     }
 }
 
+.navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.navbar-toggler:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.navbar-toggler-icon.custom-toggler-icon {
+  display: inline-block;
+  position: relative;
+  width: 22px;
+  height: 2px;
+  background-color: #fff;
+}
+.navbar-toggler-icon.custom-toggler-icon::before,
+.navbar-toggler-icon.custom-toggler-icon::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  background-color: #fff;
+  left: 0;
+}
+.navbar-toggler-icon.custom-toggler-icon::before {
+  top: -7px;
+}
+.navbar-toggler-icon.custom-toggler-icon::after {
+  top: 7px;
+}
+
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: linear-gradient(90deg, #2874f0 0%, #0a53be 100%);
+    padding: 16px 18px 18px;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  .navbar-nav {
+    width: 100%;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+  }
+
+  .navbar-nav .nav-link:last-child {
+    border-bottom: none;
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link:focus {
+    color: #ffe500;
+  }
+}
+
 .slider-wrapper {
   display: flex;
   transition: transform 0.6s ease-in-out;
   overflow: hidden;
+  width: 100%;
+  height: 100%;
 }
 .slider-wrapper img {
-  width: 100vw;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   flex-shrink: 0;
 }
 .slider-dot {

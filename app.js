@@ -133,6 +133,26 @@ app.get("/grocery", async (req, res) => {
     res.render("pages/Grocery", { category: "Grocery", products });
   } catch (err) { res.status(500).send("Error"); }
 });
+app.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q || "";
+
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { category: { $regex: query, $options: "i" } }
+      ]
+    });
+
+    res.render("pages/search", {
+      query,
+      products
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Search Error");
+  }
+});
 
 // Product Detail Page
 app.get("/product/:id", async (req, res) => {
