@@ -1,84 +1,163 @@
-﻿# Grabit Store 🛒
+# 🛒 Grabit Store
 
-Grabit Store is a full-stack e-commerce web application built with Node.js, Express.js, EJS, MongoDB, and Bootstrap. The platform allows users to browse products, search items, manage carts, and place orders through an intuitive and responsive interface.
+A modern full-stack e-commerce web application built with Node.js, Express.js, MongoDB, EJS, and Bootstrap. Grabit provides a seamless online shopping experience with user authentication, product browsing, search functionality, and cart management.
 
 ## 🌐 Live Demo
 
-https://grabit-7if4.onrender.com/
+**Live Website:** https://grabit-7if4.onrender.com/
 
-## 🚀 Features
+**GitHub Repository:** https://github.com/Himanshu-chouhan-hc/Grabit
 
-* User Authentication (Register/Login)
-* Product Browsing
-* Product Search Functionality
-* Category-Based Navigation
-* Shopping Cart Management
-* Responsive User Interface
-* Session-Based Authentication
-* Dynamic EJS Templating
-* MongoDB Database Integration
+---
+
+## 📸 Screenshots
+
+### 🏠 Home Page
+
+![Home Page](screenshots/home.png)
+
+### 🔍 Product Search
+
+![Search](screenshots/search.png)
+
+### 🛍️ Product Listing
+
+![Products](screenshots/products.png)
+
+### 🛒 Shopping Cart
+
+![Cart](screenshots/cart.png)
+
+### 👤 Authentication
+
+![Login](screenshots/login.png)
+
+> Create a `screenshots` folder inside your repository and upload these images.
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication System
+
+* User Registration
+* Secure Login & Logout
+* Session Management
+* Protected Routes
+
+### 🛍️ E-Commerce Features
+
+* Product Catalog
+* Category Browsing
+* Product Search
+* Dynamic Product Pages
+* Shopping Cart
+
+### 🎨 User Experience
+
+* Responsive Design
+* Mobile-Friendly Layout
+* Clean UI
+* Fast Navigation
+
+### ⚡ Backend Features
+
+* RESTful Routing
+* MongoDB Integration
+* Mongoose ODM
+* Error Handling
+* Server-Side Rendering
+
+---
 
 ## 🛠️ Tech Stack
 
-### Frontend
+| Category        | Technologies                         |
+| --------------- | ------------------------------------ |
+| Frontend        | HTML5, CSS3, Bootstrap 5, JavaScript |
+| Template Engine | EJS                                  |
+| Backend         | Node.js, Express.js                  |
+| Database        | MongoDB, Mongoose                    |
+| Authentication  | Express Session                      |
+| Deployment      | Render                               |
 
-* HTML5
-* CSS3
-* Bootstrap 5
-* JavaScript
-* EJS
-
-### Backend
-
-* Node.js
-* Express.js
-
-### Database
-
-* MongoDB
-* Mongoose
-
-### Deployment
-
-* Render
+---
 
 ## 📂 Project Structure
 
-```
-grabitstore/
+```text
+Grabit/
 │
 ├── models/
 ├── routes/
 ├── views/
 │   ├── pages/
 │   └── partials/
+│
 ├── public/
 │   ├── css/
 │   ├── js/
-│   └── images/
+│   ├── images/
+│
 ├── middleware/
 ├── config/
+│
 ├── app.js
 ├── package.json
+├── .env
 └── README.md
 ```
 
-## ⚙️ Installation
+---
 
-### Clone Repository
+## 🏗️ System Architecture
 
-```bash
-git clone <your-repository-url>
-cd grabitstore
+```text
+┌──────────────┐
+│    User      │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────┐
+│ Browser UI   │
+│ EJS + CSS    │
+└──────┬───────┘
+       │ HTTP
+       ▼
+┌──────────────┐
+│ Express.js   │
+│ Application  │
+└──────┬───────┘
+       │
+ ┌─────┴─────┐
+ ▼           ▼
+Routes     Sessions
+ │
+ ▼
+Models
+ │
+ ▼
+MongoDB Atlas
 ```
 
-### Install Dependencies
+---
+
+## 🚀 Installation Guide
+
+### 1️⃣ Clone Repository
+
+```bash
+git clone https://github.com/Himanshu-chouhan-hc/Grabit.git
+cd Grabit
+```
+
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
 ```
 
-### Create Environment Variables
+### 3️⃣ Configure Environment Variables
 
 Create a `.env` file:
 
@@ -88,7 +167,7 @@ SESSION_SECRET=your_secret_key
 PORT=9000
 ```
 
-### Run Project
+### 4️⃣ Start Application
 
 ```bash
 npm start
@@ -100,35 +179,99 @@ or
 node app.js
 ```
 
-Open:
+### 5️⃣ Open Browser
 
 ```text
 http://localhost:9000
 ```
 
-## 📸 Screenshots
+---
 
-* Home Page
-* Product Listing
-* Search Results
-* Shopping Cart
-* Login & Registration
+## 🌍 Deployment Guide (Render)
 
-(Add screenshots here)
+### Step 1
 
-## 🎯 Future Improvements
+Push project to GitHub.
 
-* Wishlist Feature
-* Online Payment Gateway
-* Order Tracking
-* Product Reviews & Ratings
-* Admin Dashboard
-* AI Product Recommendations
+### Step 2
+
+Create an account on Render.
+
+### Step 3
+
+Click **New Web Service**.
+
+### Step 4
+
+Connect your GitHub repository.
+
+### Step 5
+
+Configure:
+
+```text
+Build Command:
+npm install
+
+Start Command:
+npm start
+```
+
+### Step 6
+
+Add Environment Variables:
+
+```env
+MONGODB_URI=your_connection_string
+SESSION_SECRET=your_secret_key
+```
+
+### Step 7
+
+Deploy Application 🚀
+
+---
+
+## 🎯 Future Enhancements
+
+* ❤️ Wishlist System
+* ⭐ Product Reviews & Ratings
+* 💳 Online Payments (Razorpay/Stripe)
+* 📦 Order Tracking
+* 📧 Email Notifications
+* 🛠️ Admin Dashboard
+* 🤖 AI Product Recommendations
+
+---
+
+## 📈 Learning Outcomes
+
+Through this project, I gained hands-on experience with:
+
+* Full-Stack Web Development
+* REST Architecture
+* Authentication & Authorization
+* MongoDB Database Design
+* MVC Project Structure
+* Deployment & Hosting
+* Git & GitHub Workflow
+
+---
 
 ## 👨‍💻 Developer
 
-Himanshu Babu
+**Himanshu Babu**
+
+GitHub: https://github.com/Himanshu-chouhan-hc
+
+---
+
+## ⭐ Support
+
+If you found this project useful, please consider giving it a ⭐ on GitHub.
+
+---
 
 ## 📄 License
 
-This project is developed for learning, portfolio, and educational purposes.
+This project is developed for educational, portfolio, and learning purposes.
