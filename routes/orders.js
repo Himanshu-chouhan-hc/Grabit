@@ -1,103 +1,97 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Order = require('../module/order');
-const  verifyToken  = require('../middleware/verify');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+
+const Order = require("../module/order");
+const verifyToken = require("../middleware/verify");
+
+const razorpayInstance = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
 
 
-// Create order
-router.post('/api/orders', verifyToken, async (req, res) => {
+// =====================
+// CREATE ORDER
+// =====================
+router.post("/api/create-order", verifyToken, async (req, res) => {
   try {
-    const { items, totalAmount, discount, deliveryFee, shippingAddress, paymentMethod, paymentDetails } = req.body;
+    const { amount } = req.body;
 
-    const finalAmount = totalAmount - discount + deliveryFee;
-
-    // generate unique order number here instead of relying on schema hook
-    const orderNumber = 'ORD' + Date.now();
-
-    const orderData = {
-      userId: req.userId,
-      orderNumber,
-      items,
-      totalAmount,
-      discount,
-      deliveryFee,
-      finalAmount,
-      shippingAddress,
-      paymentMethod,
-      estimatedDelivery: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
-    };
-
-    if (paymentDetails) {
-      orderData.paymentDetails = paymentDetails;
-      // mark payment as completed for simulation
-      orderData.paymentStatus = 'Completed';
-    }
-
-    const order = new Order(orderData);
-
-    await order.save();
-
-    res.json({
-      success: true,
-      message: 'Order created successfully',
-      data: order,
+    const order = await razorpayInstance.orders.create({
+      amount: Math.round(amount * 100),
+      currency: "INR",
+      receipt: `rcpt_${Date.now()}`
     });
+
+    res.json({ success: true, order });
+
   } catch (err) {
-    console.error('Order creation error:', err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
 
-// Get user orders
-router.get('/api/orders', verifyToken, async (req, res) => {
+// =====================
+// VERIFY PAYMENT + SAVE ORDER
+// =====================
+router.post("/api/verify-payment", verifyToken, async (req, res) => {
   try {
-    const orders = await Order.find({ userId: req.userId }).sort({ orderDate: -1 });
+    const {
+      razorpay_order_id,
+      razorpay_payment_id,
+      razorpay_signature,
+      orderData
+    } = req.body;
+
+    if (razorpay_order_id !== "COD") {
+
+      const body = razorpay_order_id + "|" + razorpay_payment_id;
+
+      const expected = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+        .update(body)
+        .digest("hex");
+
+      if (expected !== razorpay_signature) {
+        return res.json({ success: false, message: "Invalid payment" });
+      }
+    }
+
+    const order = await Order.create({
+      userId: req.userId,
+      items: orderData.items,
+      totalAmount: orderData.totalAmount,
+      discount: orderData.discount,
+      deliveryFee: orderData.deliveryFee,
+      finalAmount: orderData.finalAmount,
+      shippingAddress: orderData.shippingAddress,
+      paymentMethod: orderData.paymentMethod,
+      paymentStatus: "Completed",
+      paymentVerified: true,
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id
+    });
+
+    res.json({ success: true, order });
+
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
+// =====================
+// GET ORDERS
+// =====================
+router.get("/api/orders", verifyToken, async (req, res) => {
+  try {
+    const orders = await Order.find({ userId: req.userId })
+      .sort({ createdAt: -1 });
+
     res.json({ success: true, data: orders });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
 
-// Get order details
-router.get('/api/orders/:id', verifyToken, async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
-    if (!order) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
-    }
-
-    if (order.userId.toString() !== req.userId) {
-      return res.status(403).json({ success: false, message: 'Not authorized' });
-    }
-
-    res.json({ success: true, data: order });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-// Cancel order
-router.put('/api/orders/:id/cancel', verifyToken, async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
-    
-    if (!order) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
-    }
-
-    if (order.userId.toString() !== req.userId) {
-      return res.status(403).json({ success: false, message: 'Not authorized' });
-    }
-
-    if (order.orderStatus !== 'Processing') {
-      return res.status(400).json({ success: false, message: 'Can only cancel Processing orders' });
-    }
-
-    order.orderStatus = 'Cancelled';
-    await order.save();
-
-    res.json({ success: true, message: 'Order cancelled', data: order });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

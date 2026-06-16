@@ -1,31 +1,42 @@
 <%- layout('layouts/boilerplate') %>
+
 <link rel="stylesheet" href="/css/checkout.css">
 
 <div class="checkout-container">
-  <!-- Progress steps -->
+
+  <!-- Progress Steps -->
   <div class="checkout-steps">
     <div class="step completed">1. Address</div>
-    <div class="step">2. Payment</div>
+    <div class="step completed">2. Payment</div>
     <div class="step">3. Review</div>
   </div>
+
   <div class="checkout-content">
+
+    <!-- MAIN SECTION -->
     <div class="checkout-main">
-      <!-- Address Section -->
+
+      <!-- ADDRESS -->
       <div class="checkout-section">
         <h3>1. Delivery Address</h3>
+
         <div class="address-form">
           <div class="form-group">
             <input type="text" id="fullName" placeholder="Full Name" required />
           </div>
+
           <div class="form-group">
             <input type="email" id="email" placeholder="Email" required />
           </div>
+
           <div class="form-group">
             <input type="tel" id="phone" placeholder="Phone Number" required />
           </div>
+
           <div class="form-group">
             <textarea id="street" placeholder="Street Address" required></textarea>
           </div>
+
           <div class="form-row">
             <input type="text" id="city" placeholder="City" required />
             <input type="text" id="state" placeholder="State" required />
@@ -34,66 +45,65 @@
         </div>
       </div>
 
-      <!-- Payment Section -->
+      <!-- PAYMENT -->
       <div class="checkout-section">
         <h3>2. Payment Method</h3>
+
         <div class="payment-methods">
+
+          <!-- Razorpay -->
           <label class="payment-option">
-            <input type="radio" name="payment" value="COD" checked />
-            <span class="icon">🚚</span><span> Cash on Delivery</span>
-          </label>
-          <label class="payment-option">
-            <input type="radio" name="payment" value="UPI" />
-            <span class="icon">📱</span><span> UPI / Wallet</span>
-          </label>
-          <!-- UPI id input hidden by default -->
-          <div id="upiDetails">
-            <div class="form-group">
-              <input type="text" id="upiId" placeholder="Enter UPI ID (e.g. yourname@okhdfcbank)" />
-            </div>
-          </div>
-          <label class="payment-option">
-            <input type="radio" name="payment" value="Credit Card" />
-            <span class="icon">💳</span><span> Credit / Debit Card</span>
+            <input type="radio" name="payment" value="Razorpay" checked />
+            <span class="icon">💳</span>
+            <span>Pay Online (UPI / Card / Wallet)</span>
           </label>
 
-          <!-- Credit card details shown conditionally -->
-          <div id="cardDetails">
-            <div class="form-group">
-              <input type="text" id="cardHolder" placeholder="Cardholder Name" />
-            </div>
-            <div class="form-group">
-              <input type="text" id="cardNumber" placeholder="Card Number" maxlength="19" />
-            </div>
-            <div class="form-row">
-              <input type="text" id="cardExpiry" placeholder="MM/YY" />
-              <input type="text" id="cardCvv" placeholder="CVV" maxlength="3" />
-            </div>
-          </div>
+          <!-- COD -->
+          <label class="payment-option">
+            <input type="radio" name="payment" value="COD" />
+            <span class="icon">🚚</span>
+            <span>Cash on Delivery</span>
+          </label>
+
         </div>
+
+        <p class="secure-note">
+          🔒 Secure payment powered by Razorpay
+        </p>
       </div>
 
-      <!-- Order Review -->
+      <!-- ORDER REVIEW -->
       <div class="checkout-section">
         <h3>3. Order Review</h3>
+
         <div id="orderReview" class="order-review">
-          <!-- Items will be loaded here -->
+          <!-- JS inject items here -->
         </div>
       </div>
-      <!-- Place order button: handled via JavaScript, no anchor wrapping to prevent premature navigation -->
-      <button id="placeOrderBtn" class="place-order-btn">Place Order</button>
+
+      <!-- PLACE ORDER BUTTON -->
+      <button id="placeOrderBtn" class="place-order-btn">
+        Place Order
+      </button>
+
     </div>
 
-    <!-- Order Summary Sidebar -->
+    <!-- SIDEBAR -->
     <div class="order-summary">
+
       <h3>Order Summary</h3>
+
       <div id="summaryItems"></div>
+
       <div class="summary-total">
         <span>Total</span>
         <span>₹<span id="summaryTotal">0</span></span>
       </div>
+
     </div>
+
   </div>
 </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="/js/checkout.js"></script>

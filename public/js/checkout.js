@@ -1,156 +1,123 @@
-// checkout.js - logic moved from checkout.ejs
-const cart = JSON.parse(localStorage.getItem('cart')) || [];
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const token = localStorage.getItem("token");
 
-function renderCheckoutReview() {
-  const orderReview = document.getElementById('orderReview');
-  const summaryItems = document.getElementById('summaryItems');
-
-  const itemsHTML = cart.map(item => `
-    <div class="review-item">
-      <div class="review-item-image">
-        <img src="${item.image}" alt="${item.name}" />
-      </div>
-      <div class="review-item-info">
-        <div class="review-item-name">${item.name}</div>
-        <div class="review-item-price">₹${item.price.toLocaleString()} × ${item.quantity}</div>
-      </div>
-    </div>
-  `).join('');
-
-  orderReview.innerHTML = itemsHTML;
-  summaryItems.innerHTML = cart.map(item => `
-    <div class="summary-item">
-      <span>${item.name} (${item.quantity})</span>
-      <span>₹${(item.price * item.quantity).toLocaleString()}</span>
-    </div>
-  `).join('');
-
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const total = subtotal - (subtotal * 0.1) + 50;
-  document.getElementById('summaryTotal').textContent = total.toLocaleString();
+function getTotal() {
+  const subtotal = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+  const discount = subtotal * 0.1;
+  const deliveryFee = 50;
+  const total = subtotal - discount + deliveryFee;
+  return { subtotal, discount, deliveryFee, total };
 }
 
-function setButtonLoading(on) {
-  const placeBtn = document.getElementById('placeOrderBtn');
-  if (on) placeBtn.classList.add('loading');
-  else placeBtn.classList.remove('loading');
-}
+document.getElementById("placeOrderBtn").addEventListener("click", async () => {
+  const { subtotal, discount, deliveryFee, total } = getTotal();
 
-// event listeners and initialization
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('placeOrderBtn').addEventListener('click', async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      window.location.href = '/auth';
-      return;
-    }
+  const address = {
+    name: document.getElementById("fullName").value,
+    phone: document.getElementById("phone").value,
+    street: document.getElementById("street").value,
+    city: document.getElementById("city").value,
+    state: document.getElementById("state").value,
+    pincode: document.getElementById("pincode").value,
+  };
 
-    const fullName = document.getElementById('fullName').value;
-    const phone = document.getElementById('phone').value;
-    const street = document.getElementById('street').value;
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
-    const pincode = document.getElementById('pincode').value;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+  const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
 
-    if (!fullName || !phone || !street || !city || !state || !pincode) {
-      alert('Please fill all address fields');
-      return;
-    }
+  if (!token) return (window.location.href = "/auth");
 
-    let paymentDetails = null;
-    if (paymentMethod === 'Credit Card') {
-      const cardHolder = document.getElementById('cardHolder').value.trim();
-      const cardNumber = document.getElementById('cardNumber').value.trim();
-      const cardExpiry = document.getElementById('cardExpiry').value.trim();
-      const cardCvv = document.getElementById('cardCvv').value.trim();
+  try {
+    // 1. CREATE ORDER
+    const res = await fetch("/api/create-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ amount: total }),
+    });
 
-      if (!cardHolder || !cardNumber || !cardExpiry || !cardCvv) {
-        alert('Please fill all credit card details');
-        return;
-      }
+    const data = await res.json();
+    if (!data.success) return alert(data.message);
 
-      if (cardNumber.replace(/\s+/g, '').length < 16) {
-        alert('Invalid card number');
-        return;
-      }
+    const order = data.order;
 
-      paymentDetails = { cardHolder, cardNumber, expiry: cardExpiry };
-    } else if (paymentMethod === 'UPI') {
-      const upiId = document.getElementById('upiId').value.trim();
-      if (!upiId) {
-        alert('Please enter your UPI ID');
-        return;
-      }
-      paymentDetails = { upiId };
-    }
-
-    const shippingAddress = { name: fullName, phone, street, city, state, pincode };
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const discount = Math.round(subtotal * 0.1);
-    const deliveryFee = 50;
-    const totalAmount = subtotal;
-
-    try {
-      setButtonLoading(true);
-      const response = await fetch('/api/orders', {
-        method: 'POST',
+    // =========================
+    // COD FLOW
+    // =========================
+    if (paymentMethod === "COD") {
+      const save = await fetch("/api/verify-payment", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          items: cart,
-          totalAmount,
-          discount,
-          deliveryFee,
-          shippingAddress,
-          paymentMethod,
-          ...(paymentDetails && { paymentDetails }),
+          razorpay_order_id: "COD",
+          razorpay_payment_id: "COD",
+          razorpay_signature: "COD",
+          orderData: { items: cart, subtotal, discount, deliveryFee, total, shippingAddress: address, paymentMethod: "COD" },
         }),
       });
 
-      if (response.status === 401) {
-        setButtonLoading(false);
-        alert('Session expired or invalid. Please log in again.');
-        localStorage.removeItem('token');
-        window.location.href = '/auth';
-        return;
+      const result = await save.json();
+      if (result.success) {
+        localStorage.removeItem("cart");
+        window.location.href = `/order-success/${result.order._id}`;
       }
 
-      const data = await response.json();
-
-      if (data.success) {
-        alert(data.message || 'Order placed successfully');
-        localStorage.removeItem('cart');
-        window.location.href = `/order-success/${data.data._id}`;
-      } else {
-        setButtonLoading(false);
-        alert(data.message || 'Unable to place order');
-      }
-    } catch (err) {
-      setButtonLoading(false);
-      alert('Failed to place order: ' + err.message);
+      return;
     }
-  });
 
-  const paymentRadios = document.querySelectorAll('input[name="payment"]');
-  paymentRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
-      const cardSection = document.getElementById('cardDetails');
-      const upiSection = document.getElementById('upiDetails');
-      if (radio.value === 'Credit Card' && radio.checked) {
-        cardSection.style.display = 'block';
-      } else {
-        cardSection.style.display = 'none';
-      }
-      if (radio.value === 'UPI' && radio.checked) {
-        upiSection.style.display = 'block';
-      } else {
-        upiSection.style.display = 'none';
-      }
-    });
-  });
+    // =========================
+    // RAZORPAY FLOW
+    // =========================
+    const options = {
+      key: "rzp_test_T2LN7mDTmatODZ", // YOUR KEY
+      amount: order.amount,
+      currency: order.currency,
+      order_id: order.id,
 
-  renderCheckoutReview();
+      handler: async function (response) {
+        console.log("PAYMENT RESPONSE:", response);
+
+        const verify = await fetch("/api/verify-payment", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            razorpay_order_id: order.id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            orderData: {
+              items: cart,
+              subtotal,
+              discount,
+              deliveryFee,
+              total,
+              shippingAddress: address,
+              paymentMethod: "Razorpay",
+            },
+          }),
+        });
+
+        const result = await verify.json();
+
+        if (result.success) {
+          localStorage.removeItem("cart");
+          window.location.href = `/order-success/${result.order._id}`;
+        } else {
+          alert(result.message || "Payment verification failed");
+        }
+      },
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch (err) {
+    console.log(err);
+    alert("Payment error");
+  }
 });

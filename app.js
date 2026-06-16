@@ -133,6 +133,8 @@ app.get("/grocery", async (req, res) => {
     res.render("pages/Grocery", { category: "Grocery", products });
   } catch (err) { res.status(500).send("Error"); }
 });
+
+
 app.get("/search", async (req, res) => {
   try {
     const query = req.query.q || "";
