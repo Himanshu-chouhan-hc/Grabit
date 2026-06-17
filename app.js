@@ -46,7 +46,7 @@ app.use(adminRoutes);
 app.use(authRoutes.router); // Auth logic
 app.use(ordersRoutes);      // Orders logic
 app.use('/category', categoryRoutes);
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
 // --- Main Pages APIs ---
 
