@@ -38,6 +38,7 @@ async function loadOrders() {
   }
 }
 
+
 // Menu navigation
 document.querySelectorAll('.menu-item').forEach(item => {
   item.addEventListener('click', (e) => {
@@ -115,7 +116,7 @@ function logout() {
 // Picture upload
 const pictureInput = document.getElementById('profilePictureInput');
 if (pictureInput) {
-  pictureInput.addEventListener('change', async function(e) {
+  pictureInput.addEventListener('change', async function (e) {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -126,7 +127,7 @@ if (pictureInput) {
     try {
       const token = localStorage.getItem('token');
       console.log('Token from localStorage:', token ? 'exists' : 'missing');
-      
+
       if (!token) {
         alert('Please login first to upload a picture');
         window.location.href = '/auth';
@@ -144,13 +145,13 @@ if (pictureInput) {
       console.log('Response status:', response.status);
       const data = await response.json();
       console.log('Response data:', data);
-      
+
       if (data.success) {
         // Update localStorage with new picture
         const user = JSON.parse(localStorage.getItem('user'));
         user.profileImage = data.profileImage;
         localStorage.setItem('user', JSON.stringify(user));
-        
+
         alert('Picture updated!');
         location.reload();
       } else {
