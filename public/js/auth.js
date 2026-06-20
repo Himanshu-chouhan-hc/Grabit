@@ -97,3 +97,15 @@ signupForm.addEventListener('submit', async (e) => {
     signupStatus.textContent = '';
   }
 });
+// google pAuth signin logic
+const googleSignupBtn = document.getElementById('googleSignupBtn');
+
+googleSignupBtn.addEventListener('click', () => {
+  window.location.href = '/api/auth/google';
+});
+
+// Google OAuth login
+const googleLoginBtn = document.getElementById('googleLoginBtn');
+googleLoginBtn.addEventListener('click', () => {
+  window.location.href = '/api/auth/google';
+});

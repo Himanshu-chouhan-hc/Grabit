@@ -1,59 +1,89 @@
+
+// ================= AUTH CHECK =================
 const token = localStorage.getItem('token');
-if (!token) {
+const user = JSON.parse(localStorage.getItem('user') || 'null');
+
+if (!token || !user) {
   window.location.href = '/auth';
 }
 
-const user = JSON.parse(localStorage.getItem('user'));
-document.getElementById('userName').textContent = user.name;
-document.getElementById('userEmail').textContent = user.email;
-document.getElementById('profileName').value = user.name;
-document.getElementById('profileEmail').value = user.email;
 
-// Load orders
-async function loadOrders() {
-  try {
-    const response = await fetch('/api/orders', {
-      headers: { 'Authorization': `Bearer ${token}` },
-    });
-    const data = await response.json();
+// ================= AVATAR RENDER =================
+function renderAvatar(user) {
+  const img = document.getElementById('userAvatarImg');
+  const icon = document.getElementById('userAvatarIcon');
 
-    if (data.success) {
-      const ordersContainer = document.getElementById('ordersContainer');
-      ordersContainer.innerHTML = data.data.map(order => `
-        <div class="order-card">
-          <div class="order-header">
-            <span class="order-number">${order.orderNumber}</span>
-            <span class="order-status ${order.orderStatus.toLowerCase().replace(/ /g, '-')}">${order.orderStatus}</span>
-          </div>
-          <div class="order-info">
-            <span>₹${order.finalAmount.toLocaleString()}</span>
-            <span>${new Date(order.orderDate).toLocaleDateString('en-IN')}</span>
-            <span>${order.items.length} items</span>
-          </div>
-        </div>
-      `).join('') || '<p>No orders yet</p>';
+  const name = user?.name || "User";
+
+  if (user?.profileImage) {
+    if (img) {
+      img.src = user.profileImage;
+      img.style.display = "block";
     }
-  } catch (err) {
-    console.error(err);
+    if (icon) icon.style.display = "none";
+  } else {
+    if (img) img.style.display = "none";
+
+    if (icon) {
+      icon.style.display = "flex";
+      icon.textContent = name.charAt(0).toUpperCase();
+
+      icon.style.width = "80px";
+      icon.style.height = "80px";
+      icon.style.borderRadius = "50%";
+      icon.style.display = "flex";
+      icon.style.alignItems = "center";
+      icon.style.justifyContent = "center";
+      icon.style.fontSize = "30px";
+      icon.style.fontWeight = "bold";
+      icon.style.color = "white";
+      icon.style.background = "#4f46e5";
+    }
   }
 }
 
 
-// Menu navigation
-document.querySelectorAll('.menu-item').forEach(item => {
-  item.addEventListener('click', (e) => {
-    if (!item.querySelector('i')?.classList.contains('fa-sign-out-alt')) {
-      e.preventDefault();
-      const section = item.dataset.section;
-      document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-      document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-      item.classList.add('active');
-      document.getElementById(section).classList.add('active');
-      loadOrders();
-    }
-  });
+// ================= DOM LOAD =================
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById('userName').textContent = user.name || '';
+  document.getElementById('userEmail').textContent = user.email || '';
+  document.getElementById('profileName').value = user.name || '';
+  document.getElementById('profileEmail').value = user.email || '';
+
+  renderAvatar(user);
 });
 
+
+// ================= LOAD ORDERS =================
+async function loadOrders() {
+  try {
+    const response = await fetch('/api/orders', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    const data = await response.json();
+    const container = document.getElementById('ordersContainer');
+
+    if (data.success) {
+      container.innerHTML = data.data.length
+        ? data.data.map(order => `
+            <div class="order-card">
+              <div><b>${order.orderNumber}</b></div>
+              <div>${order.orderStatus}</div>
+              <div>₹${order.finalAmount}</div>
+            </div>
+          `).join('')
+        : '<p>No orders yet</p>';
+    }
+  } catch (err) {
+    console.error("Orders error:", err);
+  }
+}
+
+
+// ================= SAVE PROFILE =================
 function saveProfile() {
   const name = document.getElementById('profileName').value;
   const phone = document.getElementById('profilePhone').value;
@@ -62,118 +92,70 @@ function saveProfile() {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({ name, phone }),
+    body: JSON.stringify({ name, phone })
   })
-    .then(r => r.json())
-    .then(data => {
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      const updatedUser = { ...user, name };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      alert('Profile updated');
+      location.reload();
+    }
+  });
+}
+
+
+// ================= IMAGE UPLOAD =================
+const pictureInput = document.getElementById('profilePictureInput');
+
+if (pictureInput) {
+  pictureInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('profilePicture', file);
+
+    try {
+      const response = await fetch('/api/auth/upload-picture', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      const data = await response.json();
+
       if (data.success) {
-        alert('Profile updated');
-        localStorage.setItem('user', JSON.stringify({ ...user, name }));
+        user.profileImage = data.profileImage;
+        localStorage.setItem('user', JSON.stringify(user));
+
+        renderAvatar(user);
+
+        alert('Profile picture updated!');
+      } else {
+        alert(data.message || 'Upload failed');
       }
-    });
+    } catch (err) {
+      console.error(err);
+      alert('Upload failed: ' + err.message);
+    }
+  });
 }
 
-function showAddAddressForm() {
-  document.getElementById('addAddressForm').style.display = 'flex';
-}
 
-function hideAddAddressForm() {
-  document.getElementById('addAddressForm').style.display = 'none';
-}
-
-function saveAddress() {
-  const name = document.getElementById('addressName').value;
-  const street = document.getElementById('addressStreet').value;
-  const city = document.getElementById('addressCity').value;
-  const state = document.getElementById('addressState').value;
-  const pincode = document.getElementById('addressPincode').value;
-
-  fetch('/api/auth/address', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({ name, street, city, state, pincode }),
-  })
-    .then(r => r.json())
-    .then(data => {
-      if (data.success) {
-        hideAddAddressForm();
-        alert('Address saved');
-      }
-    });
-}
-
+// ================= LOGOUT =================
 function logout() {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   window.location.href = '/';
 }
 
-// Picture upload
-const pictureInput = document.getElementById('profilePictureInput');
-if (pictureInput) {
-  pictureInput.addEventListener('change', async function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
 
-    console.log('Uploading file:', file.name);
-    const formData = new FormData();
-    formData.append('profilePicture', file);
-
-    try {
-      const token = localStorage.getItem('token');
-      console.log('Token from localStorage:', token ? 'exists' : 'missing');
-
-      if (!token) {
-        alert('Please login first to upload a picture');
-        window.location.href = '/auth';
-        return;
-      }
-
-      const response = await fetch('/api/auth/upload-picture', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      console.log('Response status:', response.status);
-      const data = await response.json();
-      console.log('Response data:', data);
-
-      if (data.success) {
-        // Update localStorage with new picture
-        const user = JSON.parse(localStorage.getItem('user'));
-        user.profileImage = data.profileImage;
-        localStorage.setItem('user', JSON.stringify(user));
-
-        alert('Picture updated!');
-        location.reload();
-      } else {
-        alert('Upload failed: ' + (data.message || 'Unknown error'));
-      }
-    } catch (err) {
-      console.error('Upload error:', err);
-      alert('Upload failed: ' + err.message);
-    }
-  });
-}
-
-// Load user avatar on page load
-function loadUserAvatar() {
-  const user = JSON.parse(localStorage.getItem('user'));
-  if (user && user.profileImage) {
-    const img = document.getElementById('userAvatarImg');
-    img.src = user.profileImage;
-    img.style.display = 'block';
-    document.getElementById('userAvatarIcon').style.display = 'none';
-  }
-}
-
-loadUserAvatar();
+// ================= INIT =================
 loadOrders();

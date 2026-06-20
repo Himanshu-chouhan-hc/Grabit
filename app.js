@@ -5,11 +5,14 @@ const path = require('path');
 const ejsMate = require('ejs-mate');
 const cookieParser = require('cookie-parser');
 require("dotenv").config();
+const jwt = require('jsonwebtoken');
 
 // Models
 const Feature = require('./module/feature');
 const Product = require('./module/product');
+const passport = require('passport');
 
+app.use(passport.initialize());
 // Route Imports
 const productRoutes = require('./routes/products');
 const adminRoutes = require('./routes/admin');
@@ -75,7 +78,6 @@ app.get("/", async (req, res) => {
     res.status(500).send("Error loading home page");
   }
 });
-
 // Auth, Cart, Checkout, Account
 app.get("/auth", (req, res) => res.render("pages/auth"));
 app.get("/cart", (req, res) => res.render("pages/cart"));
@@ -156,7 +158,9 @@ app.get("/search", async (req, res) => {
     res.status(500).send("Search Error");
   }
 });
-
+app.get('/auth-success', (req, res) => {
+  res.render('pages/auth-success');
+});
 // Product Detail Page
 app.get("/product/:id", async (req, res) => {
   try {
